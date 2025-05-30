@@ -17,7 +17,6 @@ import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
 import { useReadData } from "@/hooks/useReadData";
 import { CollegeType } from "@/types";
-import { Loader2 } from "lucide-react";
 
 interface OverviewProps {
   onNext: (data: any) => void;
