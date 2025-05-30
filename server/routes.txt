@@ -1,0 +1,44 @@
+import express from 'express';
+import authRouter from './authRouter';
+import { admissionCriteriaRouter } from './admissionCriteriaRouter';
+import { admissionRouter } from './admissionRouter';
+import { applicationRouter } from './applicationRouter';
+import { campusAmenityRouter } from './campusAmenityRouter';
+import { collegeRouter } from './collegeRouter';
+import { documentRouter } from './documentRouter';
+import { documentsForCollegeRouter } from './documentsForCollegeRouter';
+import { factsAndStatisticsRouter } from './factsAndStatisticsRouter';
+import { featureRouter } from './featureRouter';
+import { galleryRouter } from './galleryRouter';
+import { instituteSnapshotRouter } from './instituteSnapshotRouter';
+import { placementRouter } from './placementRouter';
+import { rawDocumentRouter } from './rawDocumentRouter';
+import { topRecruiterRouter } from './topRecruiterRouter';
+import { uploadedDocumentRouter } from './uploadedDocumentRouter';
+import { userRouter } from './userRouter';
+import { courseRouter } from './courseRouter';
+
+
+const router = express.Router();
+
+router.use("/auth", authRouter);
+router.use("/admission-criterias", admissionCriteriaRouter);
+router.use("/admissions", admissionRouter);
+router.use("/applications", applicationRouter);
+router.use("/applications", applicationRouter);
+router.use("/campus-anenities", campusAmenityRouter);
+router.use("/colleges", collegeRouter);
+router.use("/courses", courseRouter);
+router.use("/documents", documentRouter);
+router.use("/documents-for-colleges", documentsForCollegeRouter);
+router.use("/facts-and-statistics", factsAndStatisticsRouter);
+router.use("/features", featureRouter);
+router.use("/galleries", galleryRouter);
+router.use("/institute-snapshots", instituteSnapshotRouter);
+router.use("/placements", placementRouter);
+router.use("/raw-documents", rawDocumentRouter);
+router.use("/top-recruiters", topRecruiterRouter);
+router.use("/uploaded-documents", uploadedDocumentRouter);
+router.use("/users", userRouter);
+
+export default router;

@@ -1,0 +1,88 @@
+{
+    "name": "College Name",
+    "description": "College description",
+    "location": "City, State",
+    "rank": "1",
+    "courses": [
+        {
+            "course": "Course Name",
+            "fees": 10000,
+            "eligibility": "Eligibility criteria",
+            "duration": "2 years",
+            "entranceExam": "Entrance exam name"
+        },
+        {
+            "course": "Course Name 1",
+            "fees": 10000,
+            "eligibility": "Eligibility criteria 1",
+            "duration": "2 years",
+            "entranceExam": "Entrance exam name 1"
+        }
+    ],
+    "factsAndStatistics": {
+        "type": "Private/Public",
+        "avgTuitionFee": 200000,
+        "campusSize": "100 acres",
+        "studentFacultyRatio": "15:1",
+        "graduationRate": "90%",
+        "financialAid": true
+    },
+    "instituteSnapshot": {
+        "founded": "2000",
+        "ranking": "1",
+        "acceptance": "20%",
+        "enrollment": "5000",
+        "campusSize": "100 acres",
+        "accreditedBy": "Accrediting body",
+        "recognisedBy": "Recognizing body",
+        "instituteType": "Private/Public"    
+    },
+    "admissions": [
+        {
+            "title": "BCom Admission",
+            "criterias": [
+                "Candidate should have completed graduation.",
+                "Minimum CGPA of 7.7.",
+                "Entrance exam qualification required."
+            ]
+        },
+        {
+            "title": "MCom Admission",
+            "criterias": [
+                "Candidate should have completed graduation.",
+                "Minimum CGPA of 7.7.",
+                "Entrance exam qualification required."
+            ]
+        },
+        {
+            "title": "BTech Admission",
+            "criterias": [
+                "Candidate should have completed graduation.",
+                "Minimum CGPA of 7.7.",
+                "Entrance exam qualification required."
+            ]
+        }
+    ],
+    "placements": {
+        "avgSalary": 500000,
+        "highestSalary": 1000000,
+        "placementRate": "90%",
+        "topRecruiters": [
+            "Company A",
+            "Company B",
+            "Company C"
+        ]
+    },
+    "campusAmenities": [
+        "Library",
+        "Hostel",
+        "Cafeteria",
+        "Sports Complex",
+        "Gymnasium"
+    ],
+    "gallery": [
+        "image1.jpg",
+        "image2.jpg",
+        "image3.jpg"
+    ]
+}
