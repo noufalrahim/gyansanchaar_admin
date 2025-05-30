@@ -37,7 +37,7 @@ export default function Overview({ onNext, loading, editItem }: OverviewProps) {
   const [uploading, setUploading] = useState(false);
 
   console.log(editItem);
-  const { data, isLoading } = useReadData<CollegeType>(
+  const { data } = useReadData<CollegeType>(
     `collegeById-${editItem}`,
     editItem ? `/colleges/${editItem}` : null
   );
@@ -87,7 +87,7 @@ export default function Overview({ onNext, loading, editItem }: OverviewProps) {
     onNext(values);
   };
 
-  if (isLoading) return <Loader2 className="animate-spin h-6 w-6 text-gray-600" />;
+  // if (isLoading) return <Loader2 className="animate-spin h-6 w-6 text-gray-600" />;
 
   return (
     <Form {...form}>
