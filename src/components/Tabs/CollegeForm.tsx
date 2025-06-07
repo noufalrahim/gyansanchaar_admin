@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import {
-  Admission,
   Campus,
   CourseAndFees,
   FactsAndStatistics,
@@ -11,13 +10,13 @@ import {
   Placements,
 } from "./components";
 import { useCreateData } from "@/hooks/useCreateData";
-import { AdmissionCriteriaType, CollegeType, PlacementCompanyType, PlacementType, SnapshotType } from "@/types";
+import { CollegeType, PlacementCompanyType, PlacementType, SnapshotType } from "@/types";
 import { CourseType } from "@/types/CourseType";
 import { FactsAndStatisticType } from "@/types/FactsAndStatisticType";
-import { AdmissionType } from "@/types/AdmissionType";
 import { GalleryType } from "@/types/GalleryType";
+import { useModifyData } from "@/hooks/useModifyData";
 
-const steps = ["Overview", "Course & Fees", "Institute Snapshots", "Facts & Statistics", "Admission", "Placements", "Campus"];
+const steps = ["Overview", "Course & Fees", "Institute Snapshots", "Facts & Statistics", "Placements", "Campus"];
 
 interface CollegeFormProps {
   collegeDataRefetch: () => void;
@@ -26,33 +25,27 @@ interface CollegeFormProps {
 
 export default function CollegeForm({ collegeDataRefetch, editItem }: CollegeFormProps) {
   const [step, setStep] = useState(0);
-  // const [overviewData, setOverviewData] = useState<Record<string, any> | null>({});
-  // const [courseData, setCourseData] = useState<Record<string, any> | null>({});
-  // const [instituteSnapshotData, setInstituteSnapshotData] = useState<Record<string, any> | null>({});
-  // const [factsAndStatisticsData, setFactsAndStatisticsData] = useState<Record<string, any> | null>({});
-  // const [admissionData, setAdmissionData] = useState<Record<string, any> | null>({});
-  // const [placementsData, setPlacementsData] = useState<Record<string, any> | null>({});
+
   const [collegeData, setCollegeData] = useState<CollegeType>();
 
   const { mutate: createCollegeMutate, isPending: createCollegeIsPending } = useCreateData<CollegeType>('/colleges');
-  // const { mutate: updateCollegeMutate, isPending: updateCollegeIsPending } = useModifyData<CollegeTypeWithId>('/colleges');
+  const { mutate: updateCollegeMutate, isPending: updateCollegeIsPending } = useModifyData<CollegeType>('/colleges');
 
   const { mutate: createCourseMutate, isPending: createCourseIsPending } = useCreateData<CourseType[]>('/courses/many');
-  // const { mutate: updateCourseMutate, isPending: updateCourseIsPending } = useModifyData<CourseTypeWithId>('/courses');
+  // const { mutate: updateCourseMutate, 
+  //   isPending: updateCourseIsPending 
+  // } = useModifyData<CourseType>('/courses');
 
   const { mutate: createSnapshotMutate, isPending: createSnapshotIsPending } = useCreateData<SnapshotType[]>('/institute-snapshots/many');
   // const { mutate: updateSnapshotMutate, isPending: updateSnapshotIsPending } = useModifyData<SnapshotWithIdType>('/courses');
 
   const { mutate: createFactsMutate, isPending: createFactsIsPending } = useCreateData<FactsAndStatisticType[]>('/facts-and-statistics/many');
-  const { mutate: createAdmissionCriteriaMutate, isPending: createAdmissionCriteriaIsPending } = useCreateData<AdmissionCriteriaType[]>('/admission-criterias/many');
-  const { mutate: createAdmissionMutate, isPending: createAdmissionIsPending } = useCreateData<AdmissionType>('/admissions');
   const { mutate: createPlacementMutate, isPending: createPlacementIsPending } = useCreateData<PlacementType>('/placements');
   const { mutate: createPlacementCompaniesMutate, isPending: createPlacementCompanyIsPending } = useCreateData<PlacementCompanyType[]>('/placement-companies/many');
   const { mutate: createGalleryMutate, isPending: createGalleryIsPending } = useCreateData<GalleryType[]>('/galleries/many')
 
   const handleOverviewNext = (data: any) => {
     console.log(editItem);
-    // setOverviewData(data);
     console.log(data);
     if(!editItem) {
     createCollegeMutate(data, {
@@ -60,6 +53,7 @@ export default function CollegeForm({ collegeDataRefetch, editItem }: CollegeFor
         console.log("Data Entered Successfully", data);
         setStep(1);
         setCollegeData(data);
+        collegeDataRefetch();
       },
       onError: (error) => {
         console.log("Error occured", error);
@@ -67,19 +61,19 @@ export default function CollegeForm({ collegeDataRefetch, editItem }: CollegeFor
     })
   } 
   else {
-    // console.log("here");
-    // updateCollegeMutate({
-    //   id: editItem,
-    //   ...data
-    // }, {
-    //   onSuccess: (data) => {
-    //     console.log("Data updated Successfully", data);
-    //     setStep(1);
-    //   },
-    //   onError: (error) => {
-    //     console.log("Error occured", error);
-    //   }
-    // })
+    updateCollegeMutate({
+      id: editItem,
+      ...data
+    }, {
+      onSuccess: (data) => {
+        console.log("Data updated Successfully", data);
+        setStep(1);
+        collegeDataRefetch();
+      },
+      onError: (error) => {
+        console.log("Error occured", error);
+      }
+    })
   }
   };
 
@@ -87,27 +81,29 @@ export default function CollegeForm({ collegeDataRefetch, editItem }: CollegeFor
     courses: CourseType[];
   }) => {
     console.log(data);
-    // setCourseData(data);
     const courseWithCollegeId = data.courses.map((course: CourseType) => ({
       collegeId: collegeData?.id,
       ...course
     }));
 
     if(editItem) {
-    //   updateCourseMutate({
-    //     id: editItem,
-    //     ...courseWithCollegeId
-    //   },
-    //   {
-    //     onSuccess: (data) => {
-    //       console.log("Data updated", data);
-    //       setStep(2);
-    //     },
-    //     onError: (err) => {
-    //       console.log("An err occ", err);
-    //     }
-    //   }
-    // )
+      // if (editItem) {
+      //   updateCourseMutate(
+      //     {
+      //       collegeId: collegeData?.id,
+      //       courses: courseWithCollegeId,
+      //     },
+      //     {
+      //       onSuccess: (data) => {
+      //         console.log("Data updated", data);
+      //         setStep(2);
+      //       },
+      //       onError: (err) => {
+      //         console.log("An error occurred", err);
+      //       },
+      //     }
+      //   );
+      // }
   }else{
     createCourseMutate(courseWithCollegeId, {
       onSuccess: (data) => {
@@ -161,45 +157,6 @@ export default function CollegeForm({ collegeDataRefetch, editItem }: CollegeFor
     });
   };
 
-  const handleAdmissionNext = (data: {
-    admissions: AdmissionType[];
-  }) => {
-    // setAdmissionData(data);
-    data.admissions.forEach((adm) => {
-      const updatedAdm: AdmissionType = {
-        title: adm.title,
-        collegeId: collegeData?.id!
-      }
-      console.log(adm.criteria)
-      console.log(updatedAdm);
-      createAdmissionMutate(updatedAdm, {
-        onSuccess: (data) => {
-          if (adm.criteria && adm.criteria.length > 0) {
-            const updatedAdmCriteria = adm.criteria.map((admCri: AdmissionCriteriaType) => ({
-              collegeId: collegeData!.id!,
-              admissionId: data.id!,
-              criteria: admCri
-            }));
-
-            createAdmissionCriteriaMutate(updatedAdmCriteria as unknown as AdmissionCriteriaType[], {
-              onSuccess: (data) => {
-                console.log("Data Entered", data);
-                setStep(5);
-              },
-              onError: (err) => {
-                console.log("Error occured", err);
-              }
-            })
-          }
-        },
-        onError: (err) => {
-          console.log("error, ", err);
-        }
-      })
-    });
-
-  };
-
   const handlePlacementsNext = (data: PlacementType) => {
     console.log(data);
     // setStep(5);
@@ -220,7 +177,7 @@ export default function CollegeForm({ collegeDataRefetch, editItem }: CollegeFor
         createPlacementCompaniesMutate(placementCompaniesData, {
           onSuccess: (data) => {
             console.log("Entered Succesfully", data);
-            setStep(6);
+            setStep(5);
           },
           onError: (err) => {
             console.log("Err", err);
@@ -283,13 +240,12 @@ export default function CollegeForm({ collegeDataRefetch, editItem }: CollegeFor
         ))}
       </div>
 
-      {step === 0 && <Overview onNext={handleOverviewNext} loading={createCollegeIsPending} editItem={editItem}/>}
+      {step === 0 && <Overview onNext={handleOverviewNext} loading={createCollegeIsPending || updateCollegeIsPending} editItem={editItem}/>}
       {step === 1 && <CourseAndFees onNext={handleCourseNext} loading={createCourseIsPending} editItem={editItem}/>}
       {step === 2 && <InstituteSnapshot onNext={handleInstituteSnapshotNext} loading={createSnapshotIsPending} editItem={editItem}/>}
       {step === 3 && <FactsAndStatistics onNext={handleFactsAndStatisticsNext} loading={createFactsIsPending} />}
-      {step === 4 && <Admission onNext={handleAdmissionNext} loading={createAdmissionCriteriaIsPending || createAdmissionIsPending} />}
-      {step === 5 && <Placements onNext={handlePlacementsNext} loading={createPlacementCompanyIsPending || createPlacementIsPending} />}
-      {step === 6 && <Campus onSubmit={handleCampusSubmit} collegeDataRefetch={collegeDataRefetch} loading={createGalleryIsPending}/>}
+      {step === 4 && <Placements onNext={handlePlacementsNext} loading={createPlacementCompanyIsPending || createPlacementIsPending} />}
+      {step === 5 && <Campus onSubmit={handleCampusSubmit} collegeDataRefetch={collegeDataRefetch} loading={createGalleryIsPending}/>}
     </div>
   );
 }

@@ -12,7 +12,6 @@ export const readData = async <T>(url: string): Promise<T> => {
                 "x-auth-token": token,
             },
         });
-        console.log(response);
         return response.data;
     } catch (error) {
         throw new Error(`An error occurred while fetching data: ${error}`);

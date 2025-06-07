@@ -11,12 +11,14 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Edit3, MoreHorizontal, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -32,18 +34,22 @@ import { useNavigate } from "react-router-dom";
 import { ApplicationType } from "@/types/ApplicationType";
 import { cn } from "@/lib/utils";
 
-interface TableComponentProps<T> {
+interface TableComponentProps<T extends { id: string }> {
     data: T[] | undefined;
     columns: ColumnDef<T>[];
     filterColumn?: string;
     onClickTo?: string;
+    onClickEdit?: (editItem: T | undefined) => void;
+    onClickDelete?: (id: string) => void;
 };
 
-export default function TableComponent<T>({
+function TableComponentInner<T extends { id: string }>({
     columns,
     data,
     filterColumn,
     onClickTo,
+    onClickEdit,
+    onClickDelete
 }: TableComponentProps<T>) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -82,7 +88,8 @@ export default function TableComponent<T>({
                 {filterColumn && (
                     <Input
                         placeholder="Search..."
-                        value={(table.getColumn(filterColumn)?.getFilterValue() as string) ?? ""}
+                        // value={(table.getColumn(filterColumn)?.getFilterValue() as string) ?? ""}
+                        value={""}
                         onChange={(event) =>
                             table.getColumn(filterColumn)?.setFilterValue(event.target.value)
                         }
@@ -143,7 +150,7 @@ export default function TableComponent<T>({
                                     className={cn(onClickTo && 'cursor-pointer')}
                                     onClick={() =>
                                         onClickTo &&
-                                        navigate(`${onClickTo}/${(row.original as ApplicationType).id}`)
+                                        navigate(`${onClickTo}/${(row.original as unknown as ApplicationType).id}`)
                                     }
                                 >
                                     {row.getVisibleCells().map((cell) => (
@@ -156,6 +163,31 @@ export default function TableComponent<T>({
                                             </div>
                                         </TableCell>
                                     ))}
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <TableCell className="h-8 w-8 p-0 cursor-pointer hover:bg-gray-200 rounded-lg items-center justify-center flex">
+                                                <span className="sr-only">Open menu</span>
+                                                <MoreHorizontal />
+                                            </TableCell>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end" className="bg-white">
+                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                            <DropdownMenuItem
+                                                className="hover:bg-gray-200 rounded-md"
+                                                onClick={() => onClickEdit && onClickEdit(row.original)}
+                                            >
+                                                <Edit3 />
+                                                Edit
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                onClick={() => onClickDelete && onClickDelete(row.original.id)}
+                                                className="hover:bg-gray-200 rounded-md"
+                                            >
+                                                <Trash2 className="text-red-500" />
+                                                <span className="text-red-500">Delete</span>
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
                                 </TableRow>
                             ))
                         ) : (
@@ -198,3 +230,8 @@ export default function TableComponent<T>({
         </div>
     );
 }
+
+
+const TableComponent = React.memo(TableComponentInner) as typeof TableComponentInner;
+
+export default TableComponent;

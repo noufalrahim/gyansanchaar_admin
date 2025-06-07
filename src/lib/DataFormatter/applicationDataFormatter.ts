@@ -1,15 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApplicationJoinType } from "@/types/ApplicationJoinType";
 
-export default function formatApplicationData(applicationData: ApplicationJoinType[] | undefined) {
+export type FormattedApplicationType = {
+  id: string;
+  [key: string]: any;
+};
 
-  if(!applicationData){
-    return null;
-  }
+export default function formatApplicationData(applicationData: ApplicationJoinType[] | undefined): FormattedApplicationType[] | null {
+  if (!applicationData) return null;
 
   return applicationData.map(item => {
     const { application, course, college, course_frame, users } = item;
 
     return {
+      id: application.id ?? crypto.randomUUID(),
       ...application,
       college: {
         ...college
@@ -17,7 +21,7 @@ export default function formatApplicationData(applicationData: ApplicationJoinTy
       course: {
         ...course,
         courseFrame: {
-            ...course_frame,
+          ...course_frame,
         }
       },
       user: {

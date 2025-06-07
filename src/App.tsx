@@ -6,6 +6,8 @@ import { AboutApplication, Applications } from "./pages/Applications";
 import { Courses } from "./pages/Courses";
 import { ProtectedRoute } from "./router/ProtectedRoute";
 import { Login } from "./pages/Login";
+import { Location } from "./pages/Location";
+import { CourseCategory } from "./pages/CourseCategory";
 
 function App() {
   return (
@@ -50,6 +52,22 @@ function App() {
           element={
             <ProtectedRoute>
               <Layout><Courses /></Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={UrlEnum.courseCategory}
+          element={
+            <ProtectedRoute>
+              <Layout><CourseCategory /></Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={UrlEnum.location}
+          element={
+            <ProtectedRoute>
+              <Layout><Location /></Layout>
             </ProtectedRoute>
           }
         />

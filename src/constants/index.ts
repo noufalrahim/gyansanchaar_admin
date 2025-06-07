@@ -1,5 +1,5 @@
 import { NavItemsType, UrlEnum } from "@/types";
-import { BookOpen, Building, FileText, HelpCircle, LucideLayoutDashboard, Settings } from "lucide-react";
+import { BookOpen, Building, FileText, GraduationCap, HelpCircle, LucideLayoutDashboard, MapPin, Settings } from "lucide-react";
 
 export const MAIN_NAV_ITEMS: NavItemsType[] = [
     {
@@ -22,6 +22,16 @@ export const MAIN_NAV_ITEMS: NavItemsType[] = [
         url: UrlEnum.courses,
         icon: BookOpen,
     },
+    {
+        title: "Course Category",
+        url: UrlEnum.courseCategory,
+        icon: GraduationCap,
+    },
+    {
+        title: "Location",
+        url: UrlEnum.location,
+        icon: MapPin
+    }
 ];
 
 export const SECONDARY_NAV_ITEMS: NavItemsType[] = [

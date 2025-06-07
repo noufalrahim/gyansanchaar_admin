@@ -5,5 +5,7 @@ export enum UrlEnum {
     applicationDetails = '/applications/:id',
     courses = '/courses',
     login = '/login',
+    location = '/location',
+    courseCategory = '/course-category',
     default = '',
 }

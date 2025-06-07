@@ -1,7 +1,7 @@
 import { CourseFrameType } from "./CourseFrameType";
 
 export type CourseType = {
-    id?: string;
+    id: string;
     collegeId?: string;
     courseFrameId: string;
     courseFrame: CourseFrameType;
