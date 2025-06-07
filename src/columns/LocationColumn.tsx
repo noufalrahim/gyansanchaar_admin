@@ -2,9 +2,9 @@ import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import { CourseFrameType } from "@/types";
+import { LocationType } from "@/types";
 
-export const columns: ColumnDef<CourseFrameType>[] = [
+export const columns: ColumnDef<LocationType>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -28,55 +28,29 @@ export const columns: ColumnDef<CourseFrameType>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "course",
+        accessorKey: "state",
         header: ({ column }) => (
             <Button
                 variant="ghost"
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-                Course
+                State
                 <ArrowUpDown />
             </Button>
         ),
-        cell: ({ row }) => <div>{row.original.name}</div>,
+        cell: ({ row }) => <div>{row.original.state}</div>,
     },
     {
-        accessorKey: "duration",
+        accessorKey: "place",
         header: ({ column }) => (
             <Button
                 variant="ghost"
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-                Duration
+                Place
                 <ArrowUpDown />
             </Button>
         ),
-        cell: ({ row }) => <div className="">{row.original.duration}</div>,
-    },
-    {
-        accessorKey: "level",
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-                Level
-                <ArrowUpDown />
-            </Button>
-        ),
-        cell: ({ row }) => <div className="">{row.original.level}</div>,
-    },
-    {
-        accessorKey: "averageSalary",
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-                Average Salary
-                <ArrowUpDown />
-            </Button>
-        ),
-        cell: ({ row }) => <div className="">{row.original.averageSalary}</div>,
+        cell: ({ row }) => <div>{row.original.place}</div>,
     },
 ];

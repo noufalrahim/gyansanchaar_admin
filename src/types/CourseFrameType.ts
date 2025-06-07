@@ -1,9 +1,9 @@
 export type CourseFrameType = {
-    id?: string;
+    id: string;
     name: string;
     duration: string;
+    courseCategoryId: string;
+    level: string;
+    averageSalary: string;
+    description: string;
 };
-
-export type CourseFrameTypeWithId = CourseFrameType & {
-    id: string;
-}

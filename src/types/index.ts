@@ -18,3 +18,6 @@ export * from './PlacementType';
 export * from './GalleryType';
 export * from './CourseFrameType';
 export * from './CourseJoinType';
+export * from './LocationType';
+export * from './CourseCategoryType';
+export * from './FormType';

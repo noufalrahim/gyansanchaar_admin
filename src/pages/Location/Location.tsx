@@ -4,102 +4,54 @@ import { AppBar } from "@/components/AppBar";
 import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
 import { TableComponent } from "@/components/Table";
 import { Plus } from "lucide-react";
-import { CourseCategoryType, CourseFrameType, FormFieldSchema } from "@/types";
+import { LocationType, FormFieldSchema } from "@/types";
 import { useReadData } from "@/hooks/useReadData";
-import { columns as rawColumns } from "@/columns/CoursesColumn";
 import { GeneralizedModalForm } from "@/components/Form";
 import { useCreateData } from "@/hooks/useCreateData";
+import { columns as rawColumns } from "@/columns/LocationColumn";
 import { useModifyData } from "@/hooks/useModifyData";
 import { useDeleteData } from "@/hooks/useDeleteData";
 import { DialogModal } from "@/components/Modal";
+import { States } from "@/lib/StatesData";
 
-const END_POINT = '/course-frames';
+const locationSchema: FormFieldSchema[] = [
+    {
+        name: "state",
+        label: "State",
+        type: "dropdown",
+        options: States.map((st) => ({
+          label: st.name,
+          value: st.id,
+        })),
+        placeholder: "Select State",
+        validation: { required: true, maxLength: 50 }
+    },
+    {
+      name: "place",
+      label: "Place",
+      type: "text",
+      placeholder: "Eg: Bengaluru",
+      validation: { required: true, maxLength: 50 }
+  },
+];
 
-export default function Courses() {
+const END_POINT = '/locations';
+
+export default function Location() {
     const [open, setOpen] = useState(false);
     const [openWarnModal, setOpenWarnModal] = useState(false);
-    const [selectedItem, setSelectedItem] = useState<CourseFrameType | { id: string } | undefined>();
+    const [selectedItem, setSelectedItem] = useState<LocationType | { id: string } | undefined>();
 
-    const { data: courseCategoryData, isLoading: courseCatgeoryIsLoading } = useReadData<CourseCategoryType[]>('courseCategory', '/course-categories');
-
-    const { data, isLoading, isError, refetch } = useReadData<CourseFrameType[]>('courseFrames', END_POINT);
-    const { mutate: createMutate, isPending: isCreating } = useCreateData<CourseFrameType>(END_POINT);
-    const { mutate: updateMutate, isPending: isUpdating } = useModifyData<CourseFrameType>(END_POINT);
+    const { data, isLoading, isError, refetch } = useReadData<LocationType[]>('location', END_POINT);
+    const { mutate: createMutate, isPending: isCreating } = useCreateData<LocationType>(END_POINT);
+    const { mutate: updateMutate, isPending: isUpdating } = useModifyData<LocationType>(END_POINT);
     const { mutate: deleteMutate, isPending: isDeleting } = useDeleteData(END_POINT);
-
-    const courseSchema: FormFieldSchema[] = [
-        {
-            name: "name",
-            label: "Course Name",
-            type: "text",
-            placeholder: "Eg: Science",
-            validation: { required: true }
-        },
-        {
-            name: "subheader",
-            label: "Subheading",
-            type: "textarea",
-            placeholder: "Subheader",
-            validation: { required: true }
-        },
-        {
-            name: "duration",
-            label: "Duration",
-            type: "text",
-            placeholder: "Eg: 4",
-            validation: { required: true, maxLength: 50 }
-        },
-        {
-            name: "courseCategoryId",
-            label: "Course Category",
-            type: "dropdown",
-            options: courseCategoryData && courseCategoryData.map((cc) => ({
-                label: cc.name,
-                value: cc.id,
-            })),
-            placeholder: 'Select Course Category',
-            validation: { required: true }
-        },
-        {
-            name: "level",
-            label: "Level",
-            type: "dropdown",
-            options: [
-                {
-                    label: "Undergraduation",
-                    value: "undergraduation",
-
-                },
-                {
-                    label: "Postgraduation",
-                    value: "postgraduation"
-                }
-            ],
-            placeholder: "Select Level",
-            validation: { required: true }
-        },
-        {
-            name: "averageSalary",
-            label: "Average Salary",
-            type: "text",
-            placeholder: "Eg: $450000-$600000",
-            validation: { required: true, maxLength: 50 }
-        },
-        {
-            name: "description",
-            label: "Description",
-            type: "textarea",
-            placeholder: "Description",
-            validation: { required: true }
-        },
-    ];
 
     const memoizedColumns = useMemo(() => rawColumns, []);
 
-    const handleEdit = useCallback((item: CourseFrameType | undefined) => {
+    const handleEdit = useCallback((item: LocationType | undefined) => {
         setSelectedItem(item);
-        setTimeout(() => setOpen(true), 0);
-    }, []);
+        setTimeout(() => setOpen(true), 0);    }, []);
 
     const handleDelete = useCallback((id: string) => {
         setSelectedItem({ id });
@@ -109,7 +61,6 @@ export default function Courses() {
     const handleSubmit = useCallback(
         (formData: any) => {
             const mutationFn = selectedItem && 'id' in selectedItem ? updateMutate : createMutate;
-            console.log(formData);
             mutationFn(formData, {
                 onSuccess: () => {
                     refetch();
@@ -136,18 +87,18 @@ export default function Courses() {
         }
     }, [selectedItem, deleteMutate, refetch]);
 
-    if (isLoading || courseCatgeoryIsLoading) return <p>Loading...</p>;
+    if (isLoading) return <p>Loading...</p>;
     if (isError) return <p>An error occurred!</p>;
 
     return (
         <div>
-            <AppBar title="Courses" description="Manage all your course here">
+            <AppBar title="Locations" description="Manage all your locations here">
                 <PrimaryButton
                     onClick={() => {
                         setSelectedItem(undefined);
                         setOpen(true);
                     }}
-                    label="Add Course"
+                    label="Add Location"
                     leadIcon={<Plus />}
                 />
             </AppBar>
@@ -155,7 +106,7 @@ export default function Courses() {
             <TableComponent
                 columns={memoizedColumns}
                 data={data}
-                filterColumn="course"
+                filterColumn="place"
                 onClickEdit={handleEdit}
                 onClickDelete={handleDelete}
             />
@@ -163,15 +114,15 @@ export default function Courses() {
             <GeneralizedModalForm
                 open={open}
                 setOpen={setOpen}
-                schema={courseSchema}
+                schema={locationSchema}
                 onSubmit={handleSubmit}
-                title="Course Category"
-                description="Add a new course"
+                title="Locations"
+                description="Add a new location"
                 loading={isCreating || isUpdating}
                 editItem={selectedItem}
             />
 
-            <DialogModal open={openWarnModal} setOpen={setOpenWarnModal} title="Delete Course">
+            <DialogModal open={openWarnModal} setOpen={setOpenWarnModal} title="Delete Location">
                 <h1 className="font-bold text-xl text-center">
                     Are you sure you want to delete this item? This action cannot be undone.
                 </h1>

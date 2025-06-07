@@ -13,6 +13,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { statusMap } from "@/lib/BadgeGenerator";
 import { cn } from "@/lib/utils";
 import { ApplicationType } from "@/types/ApplicationType";
+import { FormattedApplicationType } from "@/lib/DataFormatter/applicationDataFormatter";
 
 export const columns: ColumnDef<ApplicationType>[] = [
     {
@@ -146,4 +147,38 @@ export const columns: ColumnDef<ApplicationType>[] = [
             )
         },
     },
+];
+
+
+
+export const formattedColumns: ColumnDef<FormattedApplicationType>[] = [
+  {
+    header: "Application ID",
+    accessorKey: "id",
+  },
+  {
+    header: "User Name",
+    accessorFn: row => row.user?.name ?? "N/A",
+    id: "user.name",
+  },
+  {
+    header: "College",
+    accessorFn: row => row.college?.name ?? "N/A",
+    id: "college.name",
+  },
+  {
+    header: "Course",
+    accessorFn: row => row.course?.name ?? "N/A",
+    id: "course.name",
+  },
+  {
+    header: "Course Frame",
+    accessorFn: row => row.course?.courseFrame?.name ?? "N/A",
+    id: "courseFrame.name",
+  },
+  {
+    header: "Created At",
+    accessorFn: row => new Date(row.createdAt).toLocaleDateString(),
+    id: "createdAt",
+  },
 ];

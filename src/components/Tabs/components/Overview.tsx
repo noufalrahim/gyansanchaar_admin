@@ -16,7 +16,9 @@ import { PrimaryButton } from "@/components/Buttons";
 import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
 import { useReadData } from "@/hooks/useReadData";
-import { CollegeType } from "@/types";
+import { CollegeType, LocationType } from "@/types";
+import { Loader2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface OverviewProps {
   onNext: (data: any) => void;
@@ -26,14 +28,17 @@ interface OverviewProps {
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
-  location: z.string().min(2).max(50),
+  locationId: z.string().min(2).max(50),
   rank: z.string().min(1),
   description: z.string().min(2),
   coverImage: z.string().min(2),
 });
 
 export default function Overview({ onNext, loading, editItem }: OverviewProps) {
+
   const [uploading, setUploading] = useState(false);
+
+  const { data: locationData, isLoading: locationIsLoading} = useReadData<LocationType[]>('location', '/locations');
 
   console.log(editItem);
   const { data } = useReadData<CollegeType>(
@@ -43,10 +48,10 @@ export default function Overview({ onNext, loading, editItem }: OverviewProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      location: "",
-      rank: "",
-      description: "",
+      name: "Test College",
+      locationId: "",
+      rank: "22",
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed massa odio, tempor eu sem et, porta euismod lacus. Nullam pulvinar porta arcu, malesuada facilisis urna. Phasellus at lobortis sem. Morbi quis est ultricies, feugiat elit egestas, porta nisi. In non consectetur nulla, in faucibus mi.",
       coverImage: "",
     },
   });
@@ -55,7 +60,7 @@ export default function Overview({ onNext, loading, editItem }: OverviewProps) {
     if (data) {
       form.reset({
         name: data.name,
-        location: data.location,
+        locationId: data.location,
         rank: data.rank.toString(),
         description: data.description,
         coverImage: data.coverImage,
@@ -92,11 +97,11 @@ export default function Overview({ onNext, loading, editItem }: OverviewProps) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 animate-in fade-in duration-500">
         <div className="flex flex-row gap-5 w-full">
-          {["name", "location", "rank"].map((fieldName) => (
+          {["name", "rank"].map((fieldName) => (
             <FormField
               key={fieldName}
               control={form.control}
-              name={fieldName as "name" | "location" | "rank"}
+              name={fieldName as "name" | "rank"}
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>{fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}</FormLabel>
@@ -108,6 +113,36 @@ export default function Overview({ onNext, loading, editItem }: OverviewProps) {
               )}
             />
           ))}
+          <FormField
+            control={form.control}
+            name={'locationId'}
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Location</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Location" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="bg-white max-h-48">
+                    {locationIsLoading ? (
+                      <div className="w-full flex items-center justify-center py-2 text-primary-main">
+                        <Loader2 className="animate-spin" />
+                      </div>
+                    ) : (
+                      locationData?.map((loc) => (
+                        <SelectItem key={loc.id} value={loc.id!}>
+                          {loc.place}
+                        </SelectItem>
+                      ))
+                    )}
+                  </SelectContent>
+                </Select>
+                <FormMessage className="text-red-600" />
+              </FormItem>
+            )}
+          />
         </div>
 
         <FormField

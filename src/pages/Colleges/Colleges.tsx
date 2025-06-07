@@ -5,31 +5,9 @@ import { DialogModal } from '@/components/Modal';
 import { CollegeForm } from '@/components/Tabs';
 import { useDeleteData } from '@/hooks/useDeleteData';
 import { useReadData } from '@/hooks/useReadData';
-import { CollegeType } from '@/types';
+import { CollegeType, LocationType } from '@/types';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
-
-
-// const collegesData: CollegeType[] = [
-//   {
-//     name: 'IIT Madras',
-//     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non mauris sodales orci vehicula malesuada. Nullam cursus eros sit amet metus luctus pharetra. Aliquam lacus dolor, placerat sed turpis vel, rhoncus ullamcorper lorem. In vestibulum nisl posuere leo lacinia gravida. Pellentesque sed lacinia urna. Quisque id elit ornare, accumsan diam at, pharetra odio. Pellentesque ac velit nec velit ornare lacinia sed eget nisl. Nam et magna lorem.',
-//     location: 'Chennai, Madras',
-//     rank: '1',
-//   },
-//   {
-//     name: 'IIT Bombay',
-//     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non mauris sodales orci vehicula malesuada. Nullam cursus eros sit amet metus luctus pharetra. Aliquam lacus dolor, placerat sed turpis vel, rhoncus ullamcorper lorem. In vestibulum nisl posuere leo lacinia gravida. Pellentesque sed lacinia urna. Quisque id elit ornare, accumsan diam at, pharetra odio. Pellentesque ac velit nec velit ornare lacinia sed eget nisl. Nam et magna lorem.',
-//     location: 'Bombay',
-//     rank: '2',
-//   },
-//   {
-//     name: 'IIT Delhi',
-//     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non mauris sodales orci vehicula malesuada. Nullam cursus eros sit amet metus luctus pharetra. Aliquam lacus dolor, placerat sed turpis vel, rhoncus ullamcorper lorem. In vestibulum nisl posuere leo lacinia gravida. Pellentesque sed lacinia urna. Quisque id elit ornare, accumsan diam at, pharetra odio. Pellentesque ac velit nec velit ornare lacinia sed eget nisl. Nam et magna lorem.',
-//     location: 'Delhi',
-//     rank: '3',
-//   }
-// ];
 
 export default function Colleges() {
 
@@ -38,11 +16,18 @@ export default function Colleges() {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [deleteItem, setDeleteItem] = useState<string | undefined>(undefined);
 
-  const { data: collegesData, isLoading: collegesDataIsLoading, isError: collegeDataIsError, refetch: collegeDataRefetch } = useReadData<CollegeType[]>('collegesData', '/colleges');
+  const date = new Date('2000-01-01');
+
+  const { data: collegesData, isLoading: collegesDataIsLoading, isError: collegeDataIsError, refetch: collegeDataRefetch } = useReadData<{
+    college: CollegeType;
+    location: LocationType;
+  }[]>('collegesData', `/colleges/fields/many?createdAt[gte]=${date.toISOString()}`);
   const { mutate: collegeDeleteMutate, isPending: collegeDeleteMutateIsPending } = useDeleteData(`/colleges/${deleteItem}`);
 
   const handleDelete = () => {
-    collegeDeleteMutate(undefined, {
+    collegeDeleteMutate({
+      id: deleteItem!
+    }, {
       onSuccess: () => {
         console.log("Deleted");
         collegeDataRefetch();
@@ -72,12 +57,11 @@ export default function Colleges() {
         {(!collegesData || collegesData.length === 0) && <div>No Colleges Found</div>}
         {
           collegesData && collegesData.map((clg, index) => (
-            <CollegeCard college={clg} key={index} setEditItem={setEditItem} setOpen={setOpen} setDeleteItem={setDeleteItem} setOpenDeleteModal={setOpenDeleteModal} />
+            <CollegeCard college={clg.college} location={clg.location} key={index} setEditItem={setEditItem} setOpen={setOpen} setDeleteItem={setDeleteItem} setOpenDeleteModal={setOpenDeleteModal} />
           ))
         }
       </div>
       <DialogModal open={open} setOpen={setOpen} title='College' description='Add A New Collges' className='max-w-7xl'>
-        {/* <TabsIndex college={collegesData[0]}/> */}
         <CollegeForm collegeDataRefetch={collegeDataRefetch} editItem={editItem} />
       </DialogModal>
       <DialogModal open={openDeleteModal} setOpen={setOpenDeleteModal} title='Delete'>

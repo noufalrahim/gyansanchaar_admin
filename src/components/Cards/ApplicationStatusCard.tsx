@@ -6,11 +6,11 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { format } from "date-fns";
-import { ApplicationType } from '@/types/ApplicationType';
 import { statusMap } from "@/lib/BadgeGenerator";
 import { cn } from "@/lib/utils";
 import { PrimaryButton } from "../Buttons";
 import { StatusType } from "@/types/StatusType";
+import { FormattedApplicationType } from "@/lib/DataFormatter";
 
 const formatDate = (dateString: string) => {
   return format(new Date(dateString), "PPP");
@@ -18,7 +18,7 @@ const formatDate = (dateString: string) => {
 
 interface ApplicationStatusCardInterface {
   updateApplicationStatus: (status: string) => void;
-  application: ApplicationType;
+  application: FormattedApplicationType;
   isUpdating: boolean;
   selectedStatus: string;
   handleStatusChange: (newStatus: string) => void;

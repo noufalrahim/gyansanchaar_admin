@@ -184,7 +184,7 @@ export default function Placements({ onNext, loading }: PlacementProps) {
 
         <div className="h-10 my-5 flex justify-end">
           <SecondaryButton
-            label="Add Course"
+            label="Add Company"
             type="button"
             className="bg-transparent hover:bg-transparent hover:text-primary-600 shadow-none"
             onClick={() =>
