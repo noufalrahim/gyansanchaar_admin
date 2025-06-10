@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Layout } from "./layout";
 import { UrlEnum } from "./types";
-import { Colleges } from "./pages/Colleges";
+import { CollegeDetailsPage, Colleges } from "./pages/Colleges";
 import { AboutApplication, Applications } from "./pages/Applications";
 import { Courses } from "./pages/Courses";
 import { ProtectedRoute } from "./router/ProtectedRoute";
@@ -68,6 +68,22 @@ function App() {
           element={
             <ProtectedRoute>
               <Layout><Location /></Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={UrlEnum.location}
+          element={
+            <ProtectedRoute>
+              <Layout><Location /></Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={UrlEnum.collegDetails}
+          element={
+            <ProtectedRoute>
+              <Layout><CollegeDetailsPage /></Layout>
             </ProtectedRoute>
           }
         />

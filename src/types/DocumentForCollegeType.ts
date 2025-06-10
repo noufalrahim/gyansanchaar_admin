@@ -4,6 +4,6 @@ export type DocumentsForCollegeType = {
     id?: string;
     collegeId: string;
     documentFrameId: string;
-    documentFrame: DocumentFrameType;
+    documentFrame?: DocumentFrameType;
     courseId: string;
 };

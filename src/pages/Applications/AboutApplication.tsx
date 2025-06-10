@@ -8,12 +8,14 @@ import { useParams } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Download, File, FileText, Loader2 } from "lucide-react";
-import { SecondaryButton } from "@/components/Buttons";
+import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
 import { ApplicationJoinType } from "@/types/ApplicationJoinType";
 import formatApplicationData from "@/lib/DataFormatter/applicationDataFormatter";
 import formatUploadedDocumentsData from "@/lib/DataFormatter/uploadedDocumentForamtter";
 import { UploadedDocumentsJoinType } from "@/types/UploadedDocumentsJoinType";
 import { ApplicationTypeWithId, UploadDocumentsType } from "@/types";
+import { DialogModal } from "@/components/Modal";
+import { Textarea } from "@/components/ui/textarea";
 
 const formatCurrency = (amount: number) =>
   new Intl.NumberFormat("en-IN", {
@@ -25,6 +27,9 @@ const formatCurrency = (amount: number) =>
 export default function AboutApplication() {
   const { id } = useParams();
   const { toast } = useToast();
+
+  const [open, setOpen] = useState<boolean>(false);
+  const [feedback, setFeedback] = useState<string>(''); 
 
   const { data, isLoading, isError, refetch } = useReadData<ApplicationJoinType[]>(
     "applications",
@@ -55,6 +60,7 @@ export default function AboutApplication() {
   const handleStatusChange = (newStatus: string) => setSelectedStatus(newStatus);
 
   const updateApplicationStatus = () => {
+    
     if (!application) {
       toast({
         title: "An Error occurred",
@@ -70,6 +76,7 @@ export default function AboutApplication() {
         courseId: application.course?.id!,
         userId: application.user?.id!,
         status: selectedStatus,
+        message: feedback
       },
       {
         onSuccess: () => refetch(),
@@ -88,7 +95,7 @@ export default function AboutApplication() {
   return (
     <div>
       <ApplicationStatusCard
-        updateApplicationStatus={updateApplicationStatus}
+        updateApplicationStatus={() => setOpen(true)}
         handleStatusChange={handleStatusChange}
         application={application}
         isUpdating={isPending}
@@ -214,6 +221,13 @@ export default function AboutApplication() {
           </div>
         </TabsContent>
       </Tabs>
+      <DialogModal open={open} setOpen={setOpen} title="Feedback" description="Add a feedback here">
+        <Textarea value={feedback} onChange={(e) => setFeedback(e.target.value)}/>
+        <PrimaryButton className="w-full" label="Submit" onClick={() => {
+          updateApplicationStatus();
+          setOpen(false);
+        }} disabled={feedback.trim() === ''} loading={isPending}/>
+      </DialogModal>
     </div>
   );
 }

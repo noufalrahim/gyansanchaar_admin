@@ -1,7 +1,7 @@
 import { LucideIcon } from "lucide-react";
 
 export type SnapshotType = {
-    id?: string;
+    id: string;
     collegeId?: string;
     label: string;
     value: string;

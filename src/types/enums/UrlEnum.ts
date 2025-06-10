@@ -8,4 +8,5 @@ export enum UrlEnum {
     location = '/location',
     courseCategory = '/course-category',
     default = '',
+    collegDetails = '/colleges/:id'
 }

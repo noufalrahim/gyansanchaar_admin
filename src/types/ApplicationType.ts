@@ -8,6 +8,7 @@ export type ApplicationType = {
     collegeId: string;
     courseId: string;
     status: string;
+    message: string;
     createdAt?: string;
     updatedAt?: string;
     user?: UserType;

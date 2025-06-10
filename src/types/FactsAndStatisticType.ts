@@ -1,5 +1,5 @@
 export type FactsAndStatisticType = {
-    id?: string;
+    id: string;
     collegeId?: string;
     label: string;
     value: string;

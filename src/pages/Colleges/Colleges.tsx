@@ -57,7 +57,9 @@ export default function Colleges() {
         {(!collegesData || collegesData.length === 0) && <div>No Colleges Found</div>}
         {
           collegesData && collegesData.map((clg, index) => (
-            <CollegeCard college={clg.college} location={clg.location} key={index} setEditItem={setEditItem} setOpen={setOpen} setDeleteItem={setDeleteItem} setOpenDeleteModal={setOpenDeleteModal} />
+            <CollegeCard college={clg.college} location={clg.location} key={index} 
+            // setEditItem={setEditItem} 
+            setOpen={setOpen} setDeleteItem={setDeleteItem} setOpenDeleteModal={setOpenDeleteModal} />
           ))
         }
       </div>

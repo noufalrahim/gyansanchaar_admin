@@ -24,7 +24,12 @@ export default function PrimaryButton({
     type,
 }: PrimaryButtonProps) {
     return (
-        <Button onClick={onClick} className={cn('bg-primary-main hover:bg-primary-950 text-white text-sm', className)} type={type} disabled={disabled}>
+        <Button onClick={(e) => {
+            e.stopPropagation();
+        if(onClick){
+                onClick();
+            }
+        }} className={cn('bg-primary-main hover:bg-primary-950 text-white text-sm', className)} type={type} disabled={disabled}>
             {
                 loading ? (
                     <div className="flex items-center">

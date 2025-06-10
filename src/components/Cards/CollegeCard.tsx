@@ -2,11 +2,12 @@ import { GraduationCap, MapPin, Trash2 } from 'lucide-react'
 import { PrimaryButton } from '../Buttons';
 import { CollegeType, LocationType } from '@/types';
 import { slicer } from '@/lib/Slicer';
+import { useNavigate } from 'react-router-dom';
 
 interface CollegeCardProps {
     college: CollegeType,
     location: LocationType;
-    setEditItem: (editItem: string) => void;
+    // setEditItem: (editItem: string) => void;
     setOpen: (open: boolean) => void;
     setDeleteItem: (deleteItem: string) => void;
     setOpenDeleteModal: (open: boolean) => void;
@@ -18,8 +19,10 @@ export default function CollegeCard({ college,
     setDeleteItem,
     setOpenDeleteModal }: CollegeCardProps) {
 
+    const navigate = useNavigate();
+
     return (
-        <div className='shadow-sm border border-light-100 rounded-md bg-white w-full justify-between p-5 flex gap-5 flex-col'>
+        <div className='shadow-sm border border-light-100 rounded-md bg-white w-full justify-between p-5 flex gap-5 flex-col cursor-pointer' onClick={() => navigate(`/colleges/${college.id}`)}>
             <img
                 className='rounded-md w-full h-48 object-cover'
                 src={college.coverImage}
