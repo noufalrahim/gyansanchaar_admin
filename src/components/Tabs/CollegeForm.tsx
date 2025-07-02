@@ -21,9 +21,10 @@ const steps = ["Overview", "Course & Fees", "Institute Snapshots", "Facts & Stat
 interface CollegeFormProps {
   collegeDataRefetch: () => void;
   editItem: string | undefined;
+  setOpen: (open: boolean) => void;
 };
 
-export default function CollegeForm({ collegeDataRefetch, editItem }: CollegeFormProps) {
+export default function CollegeForm({ collegeDataRefetch, editItem, setOpen }: CollegeFormProps) {
   const [step, setStep] = useState(0);
 
   const [collegeData, setCollegeData] = useState<CollegeType>();
@@ -214,6 +215,7 @@ export default function CollegeForm({ collegeDataRefetch, editItem }: CollegeFor
     createGalleryMutate(updatedGallery, {
       onSuccess: () => {
         console.log("Uploaded");
+        setOpen(false);
       },
       onError: (err) => {
         console.log('An error occured', err)

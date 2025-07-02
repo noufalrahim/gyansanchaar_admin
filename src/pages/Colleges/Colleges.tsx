@@ -22,7 +22,7 @@ export default function Colleges() {
     college: CollegeType;
     location: LocationType;
   }[]>('collegesData', `/colleges/fields/many?createdAt[gte]=${date.toISOString()}`);
-  const { mutate: collegeDeleteMutate, isPending: collegeDeleteMutateIsPending } = useDeleteData(`/colleges/${deleteItem}`);
+  const { mutate: collegeDeleteMutate, isPending: collegeDeleteMutateIsPending } = useDeleteData(`/colleges`);
 
   const handleDelete = () => {
     collegeDeleteMutate({
@@ -71,7 +71,7 @@ export default function Colleges() {
         }
       </div>
       <DialogModal open={open} setOpen={setOpen} title='College' description='Add A New Collges' className='max-w-7xl'>
-        <CollegeForm collegeDataRefetch={collegeDataRefetch} editItem={editItem} />
+        <CollegeForm collegeDataRefetch={collegeDataRefetch} editItem={editItem} setOpen={setOpen}/>
       </DialogModal>
       <DialogModal open={openDeleteModal} setOpen={setOpenDeleteModal} title='Delete'>
         <p>Are you sure you want to delete this item? This action cannot be undone</p>

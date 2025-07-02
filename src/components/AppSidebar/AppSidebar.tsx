@@ -18,12 +18,19 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { MAIN_NAV_ITEMS, SECONDARY_NAV_ITEMS } from "@/constants"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { cn } from "@/lib/utils"
 
 export default function AppSidebar() {
 
   const location = useLocation();
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  }
 
   return (
     <Sidebar>
@@ -91,9 +98,9 @@ export default function AppSidebar() {
                 <SidebarMenuButton>
                   <Avatar className="h-6 w-6">
                     <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
-                    <AvatarFallback>JD</AvatarFallback>
+                    <AvatarFallback>A</AvatarFallback>
                   </Avatar>
-                  <span>John Doe</span>
+                  <span>Administrator</span>
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-56">
@@ -103,7 +110,7 @@ export default function AppSidebar() {
                 <DropdownMenuItem>
                   <span>Account Settings</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="text-destructive">
+                <DropdownMenuItem className="text-destructive" onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                 </DropdownMenuItem>
