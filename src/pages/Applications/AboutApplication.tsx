@@ -89,7 +89,11 @@ export default function AboutApplication() {
     );
   };
 
-  if (isLoading || !application) return <h1>Loading...</h1>;
+  if (isLoading || !application) return (
+    <div className="h-screen items-center flex justify-center items-center">
+                        <Loader2 className="mr-2 h-7 w-7 animate-spin" />
+                    </div>
+  );
   if (isError || updateError || isDocsError) return <h1>Something went wrong</h1>;
 
   return (

@@ -3,7 +3,7 @@ import { useState, useCallback, useMemo } from "react";
 import { AppBar } from "@/components/AppBar";
 import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
 import { TableComponent } from "@/components/Table";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { LocationType, FormFieldSchema } from "@/types";
 import { useReadData } from "@/hooks/useReadData";
 import { GeneralizedModalForm } from "@/components/Form";
@@ -20,19 +20,19 @@ const locationSchema: FormFieldSchema[] = [
         label: "State",
         type: "dropdown",
         options: States.map((st) => ({
-          label: st.name,
-          value: st.id,
+            label: st.name,
+            value: st.name,
         })),
         placeholder: "Select State",
         validation: { required: true, maxLength: 50 }
     },
     {
-      name: "place",
-      label: "Place",
-      type: "text",
-      placeholder: "Eg: Bengaluru",
-      validation: { required: true, maxLength: 50 }
-  },
+        name: "place",
+        label: "Place",
+        type: "text",
+        placeholder: "Eg: Bengaluru",
+        validation: { required: true, maxLength: 50 }
+    },
 ];
 
 const END_POINT = '/locations';
@@ -51,7 +51,8 @@ export default function Location() {
 
     const handleEdit = useCallback((item: LocationType | undefined) => {
         setSelectedItem(item);
-        setTimeout(() => setOpen(true), 0);    }, []);
+        setTimeout(() => setOpen(true), 0);
+    }, []);
 
     const handleDelete = useCallback((id: string) => {
         setSelectedItem({ id });
@@ -87,7 +88,11 @@ export default function Location() {
         }
     }, [selectedItem, deleteMutate, refetch]);
 
-    if (isLoading) return <p>Loading...</p>;
+    if (isLoading) return (
+        <div className="h-screen items-center flex justify-center">
+            <Loader2 className="mr-2 h-7 w-7 animate-spin" />
+        </div>
+    );
     if (isError) return <p>An error occurred!</p>;
 
     return (

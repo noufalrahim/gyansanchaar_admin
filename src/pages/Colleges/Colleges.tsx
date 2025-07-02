@@ -6,7 +6,7 @@ import { CollegeForm } from '@/components/Tabs';
 import { useDeleteData } from '@/hooks/useDeleteData';
 import { useReadData } from '@/hooks/useReadData';
 import { CollegeType, LocationType } from '@/types';
-import { Plus } from 'lucide-react';
+import { Loader2, Plus } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Colleges() {
@@ -39,6 +39,14 @@ export default function Colleges() {
     })
   };
 
+  if (collegesDataIsLoading) {
+    return (
+      <div className="h-screen items-center flex justify-center">
+        <Loader2 className="mr-2 h-7 w-7 animate-spin" />
+      </div>
+    )
+  }
+
   return (
     <div>
       <AppBar title='Colleges' description='Manage all your colleges here'>
@@ -52,14 +60,13 @@ export default function Colleges() {
         />
       </AppBar>
       <div className="grid gap-5 grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 2xl:grid-cols-4">
-        {collegesDataIsLoading && <div>Loading...</div>}
         {collegeDataIsError && <div>Error Occured</div>}
         {(!collegesData || collegesData.length === 0) && <div>No Colleges Found</div>}
         {
           collegesData && collegesData.map((clg, index) => (
-            <CollegeCard college={clg.college} location={clg.location} key={index} 
-            // setEditItem={setEditItem} 
-            setOpen={setOpen} setDeleteItem={setDeleteItem} setOpenDeleteModal={setOpenDeleteModal} />
+            <CollegeCard college={clg.college} location={clg.location} key={index}
+              // setEditItem={setEditItem} 
+              setOpen={setOpen} setDeleteItem={setDeleteItem} setOpenDeleteModal={setOpenDeleteModal} />
           ))
         }
       </div>

@@ -3,7 +3,7 @@ import { useState, useCallback, useMemo } from "react";
 import { AppBar } from "@/components/AppBar";
 import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
 import { TableComponent } from "@/components/Table";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { CourseCategoryType, CourseFrameType, FormFieldSchema } from "@/types";
 import { useReadData } from "@/hooks/useReadData";
 import { columns as rawColumns } from "@/columns/CoursesColumn";
@@ -136,7 +136,11 @@ export default function Courses() {
         }
     }, [selectedItem, deleteMutate, refetch]);
 
-    if (isLoading || courseCatgeoryIsLoading) return <p>Loading...</p>;
+    if (isLoading || courseCatgeoryIsLoading) return (
+        <div className="h-screen items-center flex justify-center">
+                        <Loader2 className="mr-2 h-7 w-7 animate-spin" />
+                    </div>
+    );
     if (isError) return <p>An error occurred!</p>;
 
     return (

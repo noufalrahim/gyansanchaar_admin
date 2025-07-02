@@ -11,7 +11,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDown, Edit3, MoreHorizontal, Trash2 } from "lucide-react";
+import { ChevronDown, Edit3, Loader2, MoreHorizontal, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -79,7 +79,11 @@ function TableComponentInner<T extends { id: string }>({
     });
 
     if (!data) {
-        return <div className="text-center py-10">Loading...</div>;
+        return (
+            <div className="w-screen h-full items-center justify-center">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            </div>
+        )
     }
 
     return (
